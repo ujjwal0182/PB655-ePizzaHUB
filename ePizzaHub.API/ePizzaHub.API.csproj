@@ -10,4 +10,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ePizzaHub.Core\ePizzaHub.Core.csproj" />
+    <ProjectReference Include="..\ePizzaHub.Infrastructure\ePizzaHub.Infrastructure.csproj" />
+    <ProjectReference Include="..\ePizzaHub.Models\ePizzaHub.Models.csproj" />
+    <ProjectReference Include="..\ePizzaHub.Repositories\ePizzaHub.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>

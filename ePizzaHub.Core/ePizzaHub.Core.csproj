@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ePizzaHub.Models\ePizzaHub.Models.csproj" />
+    <ProjectReference Include="..\ePizzaHub.Repositories\ePizzaHub.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>
