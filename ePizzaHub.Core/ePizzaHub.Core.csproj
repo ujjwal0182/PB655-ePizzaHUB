@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ePizzaHub.Models\ePizzaHub.Models.csproj" />
     <ProjectReference Include="..\ePizzaHub.Repositories\ePizzaHub.Repositories.csproj" />
   </ItemGroup>

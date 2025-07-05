@@ -11,6 +11,6 @@ namespace ePizzaHub.Models.ApiModels.Request
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string PhonneNumber { get; set; } // Note: Corrected typo from PhoneNumber to 
+        public string PhoneNumber { get; set; } // Note: Corrected typo from PhoneNumber to 
     }
 }

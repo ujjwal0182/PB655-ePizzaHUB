@@ -16,6 +16,8 @@ namespace ePizzaHub.API
 
             // Add services to the container.
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //It will trying to figuring out all the classes file that inherit from mapper profile. [UserMappingProfile : Profile]
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
