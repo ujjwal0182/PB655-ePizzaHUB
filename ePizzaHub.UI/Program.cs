@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace ePizzaHub.UI
 {
     public class Program
@@ -8,6 +10,25 @@ namespace ePizzaHub.UI
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Login/Login";
+                    options.LogoutPath = "/Login/Signout";
+                });
+
+            builder.Services.AddAuthorization();
+
+            //This way my APIs are configured on the service injection layer, How can you get this in the controller ?
+
+            builder.Services.AddHttpContextAccessor(); ///It is a method to register the dependency injection of services inside this DI container.
+            
+            builder.Services.AddHttpClient("ePizzaAPI",option =>
+            {
+                option.BaseAddress = new Uri(builder.Configuration["EPizzaAPI:Url"]!);
+                option.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
 
             var app = builder.Build();
 
@@ -24,6 +45,7 @@ namespace ePizzaHub.UI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

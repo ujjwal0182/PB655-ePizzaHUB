@@ -16,13 +16,16 @@ namespace ePizzaHub.API
 
             // Add services to the container.
 
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); //It will trying to figuring out all the classes file that inherit from mapper profile. [UserMappingProfile : Profile]
+            // Scans all assemblies in the application and automatically registers
+            // all classes that inherit from AutoMapper Profile (e.g., UserMappingProfile)
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //we need to register our DBContext in the service collection, so that we can inject it in the repository layer.
             builder.Services.AddDbContext<PB655Context>(x =>
             {
                 x.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
@@ -32,6 +35,7 @@ namespace ePizzaHub.API
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
 
             var app = builder.Build();
 

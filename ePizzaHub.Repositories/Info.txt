@@ -1,0 +1,19 @@
+﻿/********************************************************
+ * ePizzaHub.Repositories
+ * 
+ * This project contains the repository implementations for the ePizzaHub application. 
+ * It provides data access logic and interacts with the database to perform CRUD operations.
+ * 
+ * The repositories in this project are responsible for managing entities such as:
+ * - Users
+ * - Orders
+ * - Pizzas
+ * - Ingredients
+ * - Categories
+ * 
+ * Each repository implements the corresponding interface defined in the ePizzaHub.Repositories.Interfaces namespace.
+ * This allows for a clean separation of concerns and promotes the use of dependency injection throughout the application.
+ * 
+ * The repositories utilize Entity Framework Core for data access, ensuring efficient and reliable interactions with the database.
+ * 
+ *******************************************************/

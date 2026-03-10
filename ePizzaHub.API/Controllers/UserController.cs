@@ -12,7 +12,7 @@ namespace ePizzaHub.API.Controllers
     {
         private readonly IUserService _userservice;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService) //Create constructor to inject the IUserService into the controller
         {
             this._userservice = userService;    
         }

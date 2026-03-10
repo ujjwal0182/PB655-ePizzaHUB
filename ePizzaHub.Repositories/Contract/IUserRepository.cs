@@ -13,6 +13,6 @@ namespace ePizzaHub.Repositories.Contract
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-
+        Task<User> FindByUserNameAsync(string userName);
     }
 }

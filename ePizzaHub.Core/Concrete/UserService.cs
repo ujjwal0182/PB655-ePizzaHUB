@@ -25,7 +25,7 @@ namespace ePizzaHub.Core.Concrete
         }
         public async Task<bool> CreateUserRequestAsync(CreateUserRequest createUserRequest)
         {
-            // 1. insert record into user and user role tables.
+            // 1. insert record into Users and Roles tables.
             // 2. Hash passord sending by end user.
 
             //Find the detail of user where the role is User from the Role table
