@@ -12,7 +12,7 @@ namespace ePizzaHub.Models.ApiModels.Response
         public string Message { get; set; }
         public T Data { get; set; }
 
-        public ApiResponseModel(bool success, string message, T data)
+        public ApiResponseModel(bool success, T data, string message)
         {
             Success = success;
             Message = message;
