@@ -2,6 +2,7 @@
 using ePizzaHub.Core.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace ePizzaHub.API.Controllers
 {
@@ -19,6 +20,7 @@ namespace ePizzaHub.API.Controllers
         public async Task<IActionResult> Get()
         {
             var items = await _itemService.GetItemsAsync();
+            ApiResponseFormat apiResponseFormat = new ApiResponseFormat();
             return Ok(items);
         }
     }
