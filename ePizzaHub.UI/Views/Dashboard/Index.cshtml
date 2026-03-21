@@ -1,2 +1,46 @@
-﻿<h1>Dashboard Loaded</h1>
+﻿@using ePizzaHub.UI.Models.ApiModels.Response;
+@model IEnumerable<ItemResponseModel>
+@{
+ViewData["Title"] = "Dashboard";
+}
 
+<div style="background-color: skyblue">
+    <div class="container">
+        <div class="row pt-5">
+            <div class="col-sm-8">
+                <h1 class="display-4">Welcome to ePizzaHub Application</h1>
+                <p class="pb-4">
+                    Delicious Pizza Delivereds.
+                </p>
+               
+                <p>
+                    <a href="#heading" class="btn btn-success">ORDER ONLINE NOW</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pt-3">
+    <h1 class="mb-3">Pizza, Beverages</h1>
+    <div class="row">
+        @foreach(var item in Model)
+        {
+            <div class="col-sm-4 mb-3">
+                <div class="card">
+                    <img src="@item.ImageUrl" alt="!error" class="card-img-top"/>
+                    <div class="card-body">
+                        <h5>@item.Name
+                            <span class="float-end">@item.UnitPrice</span>
+                        </h5>
+                        <p class="card-text">@item.Description</p>
+                    </div>
+                    <div>
+                        <span>Size: regular</span>
+                        <span class="float-end"><a class="btn btn-success" href="">Add to Cart</a></span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
