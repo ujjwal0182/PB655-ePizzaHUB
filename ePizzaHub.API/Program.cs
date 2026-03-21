@@ -1,4 +1,5 @@
 
+using ePizzaHub.API.Middleware;
 using ePizzaHub.Core.Concrete;
 using ePizzaHub.Core.Contracts;
 using ePizzaHub.Infrastructure.Models;
@@ -53,7 +54,8 @@ namespace ePizzaHub.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseMiddleware<CommonResponseMiddleware>();
+            //app.UseMiddleware<SecondMiddleware>(); //just to check the order of execution of middlewares. It will execute after CommonResponseMiddleware as it is added after that.
 
             app.MapControllers();
 
