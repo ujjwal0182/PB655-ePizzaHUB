@@ -41,6 +41,7 @@ namespace ePizzaHub.API
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IItemService, ItemService>();
             builder.Services.AddTransient<ICartService, CartService>();
+            builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
 
             var app = builder.Build();
 

@@ -15,6 +15,16 @@ namespace ePizzaHub.Repositories.Concrete
         {
         }
 
+        public async Task<Cart> GetCartDetailsAsync(Guid guid)
+        {
+            return await _dbcontext
+                .Carts
+                .Include(x => x.CartItems)
+                .ThenInclude(x => x.Item)
+                .Where(x => x.Id == guid && x.IsActive == true)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<int> GetCartItemQuantityAsync(Guid guid)
         {
             int itemCounts = await _dbcontext.CartItems.Where(X => X.CartId == guid).CountAsync();

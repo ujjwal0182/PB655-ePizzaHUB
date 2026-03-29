@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ePizzaHub.UI.Controllers
 {
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         private readonly IHttpClientFactory httpClientFactory;
 
@@ -17,6 +17,7 @@ namespace ePizzaHub.UI.Controllers
         {
             var client = httpClientFactory.CreateClient("ePizzaAPI");
             var items = await client.GetFromJsonAsync<ApiResponseModel<IEnumerable<ItemResponseModel>>>("Item");
+            
             if (items.Success == true)
             {
                 return View(items.Data);

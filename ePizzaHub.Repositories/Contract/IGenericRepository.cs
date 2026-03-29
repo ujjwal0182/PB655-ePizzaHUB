@@ -14,5 +14,6 @@ namespace ePizzaHub.Repositories.Contract
         Task<T> AddAsync(T entity);
         IEnumerable<T> GetAll();
         Task<int> CommitAsync();
+        void Update(T entity);
     }
 }

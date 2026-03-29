@@ -4,6 +4,7 @@ using ePizzaHub.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -35,14 +36,23 @@ namespace ePizzaHub.UI.Controllers
             {
                 var client = httpClientFactory.CreateClient("ePizzaAPI"); //create client and pass the same name (ePizzaAPI) as given in DI
 
-                var userDetails = await client.GetFromJsonAsync<ValidateUserResponse>(
+                var userDetails = await client.GetFromJsonAsync<ApiResponseModel<ValidateUserResponse>>(
                                         $"Auth?userName={request.EmailAddress}&password={request.Password}");
 
-                if (userDetails is not null)
+                if (userDetails.Success)
                 {
+                    var accessToken = userDetails.Data.AccessToken;
+                    var tokenExpiryInMinutes = userDetails.Data.TokenExpiryInMinutes;
+                    var TokenHandler = new JwtSecurityTokenHandler();
+                    var TokenDetails = TokenHandler.ReadJwtToken(accessToken) as JwtSecurityToken;
+
                     List<Claim> claims = new List<Claim>();
-                    claims.Add(new Claim(ClaimTypes.Name, userDetails.Name));
-                    await GenerateTicket(claims); //right now i don't have claims to pass over here, bcz claims comes from API
+
+                    foreach(var item in TokenDetails.Claims)
+                    {
+                        claims.Add(new Claim(item.Type, item.Value));
+                    }
+                    await GenerateTicket(claims);
                     return RedirectToAction("Index", "Dashboard");
                 }
             }
@@ -100,6 +110,7 @@ namespace ePizzaHub.UI.Controllers
             var principal = new ClaimsPrincipal(identity);
 
             //with the use of SignInAsync i am able to use a cookie based authentication to simply login my user, my frontend application.
+            //This line basically save everything in the current session, and it will be used to authenticate the user in subsequent requests, it will create a cookie based authentication ticket for the user, which will be used to authenticate the user in subsequent requests.
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
                 new AuthenticationProperties()
                 {

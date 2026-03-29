@@ -47,5 +47,10 @@ namespace ePizzaHub.Repositories.Concrete
             IQueryable<T> query = _dbcontext.Set<T>();
             return query.ToList();
         }
+
+        public void Update(T entity)
+        {
+            _dbcontext.Set<T>().Update(entity);
+        }
     }
 }
