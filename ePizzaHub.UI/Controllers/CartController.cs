@@ -44,6 +44,25 @@ namespace ePizzaHub.UI.Controllers
             return View(items.Data);
         }
 
+        [HttpGet("AddToCart/{itemId:int}/{unitprice:decimal}/{quantity:int}")]
+        public async Task<IActionResult> AddToCart(int itemId, decimal unitprice, int quantity)
+        {
+            var client = httpClientFactory.CreateClient("ePizzaAPI");
+            var addToCartRequest = new
+            {
+                ItemId = itemId,
+                Quantity = quantity,
+                UnitPrice = unitprice,
+                CartId = CartId,
+                UserId = CurrentUser != null ? CurrentUser.UserId : 0
+            };
+            var itemAdded = await client.PostAsJsonAsync("Cart/add-item-to-cart", addToCartRequest);
+
+            //Update the Cart Counter as well
+            var CartItemCount = await CartItemsCount(CartId);
+            return Json(new { Count = CartItemCount });
+        }
+
         [HttpGet("GetCartItemCount")]
         public async Task<JsonResult> GetCartItemCount()
         {
@@ -79,12 +98,6 @@ namespace ePizzaHub.UI.Controllers
             var items = await client.GetFromJsonAsync<ApiResponseModel<int>>($"Cart/get-item-count?guid={cartId}");
            
             return items.Data;
-
-        }
-
-        public async Task<IActionResult> AddToCart(int id, decimal unitPrice, int quantity)
-        {
-            return View();
         }
     }
 }

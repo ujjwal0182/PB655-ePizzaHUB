@@ -13,7 +13,7 @@ namespace ePizzaHub.UI.Controllers
         /// The reason behind creating this base controller is to avoid the code duplication and I want to guess this user model across each 
         /// and every controller, so instead of writing the same code in each and every controller, I have created a base controller and I am inheriting this base controller in each and every controller, so that I can get the current logged in user's details from the token, from the claim itself.
 
-        public UserModel CurrentUSer
+        public UserModel CurrentUser
         {
             get
             {

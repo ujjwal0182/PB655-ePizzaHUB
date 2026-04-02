@@ -38,7 +38,10 @@ ViewData["Title"] = "Dashboard";
                     </div>
                     <div>
                         <span>Size: regular</span>
-                        <span class="float-end"><a class="btn btn-success" href="">Add to Cart</a></span>
+                        <span class="float-end">
+                            @* Here we pass 1 because generally when user click on add to cart button, we will add 1 quantity of that item in the cart. If user want to add more quantity, then they can update the quantity in the cart page. *@
+                            <a class="btn btn-success" onclick="AddItemToCart(@item.Id, @item.UnitPrice, 1)" href="">Add to Cart</a>
+                        </span>
                     </div>
                 </div>
             </div>
