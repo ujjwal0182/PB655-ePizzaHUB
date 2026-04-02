@@ -47,7 +47,7 @@ namespace ePizzaHub.API.Controllers
         // This API will be called when a user deletes an item from the cart, to delete the item from the cart in the database.
         [HttpPut]
         [Route("delete-item")]
-        public async Task<IActionResult> DeleteCart()
+        public async Task<IActionResult> DeleteItem()
         {
             return Ok();
         }
@@ -55,9 +55,10 @@ namespace ePizzaHub.API.Controllers
         // This API will be called when a user updates the quantity of an item in the cart, to update the item quantity in the database.
         [HttpPut]
         [Route("update-item")]
-        public async Task<IActionResult> UpdateItem()
+        public async Task<IActionResult> UpdateItem(UpdateCartItemRequest updateCartItemRequest)
         {
-            return Ok();
+            var cartDetails = await _cartService.UpdateItemInCartAsync(updateCartItemRequest.CartId, updateCartItemRequest.ItemId, updateCartItemRequest.Quantity);
+            return Ok(cartDetails);
         }
 
         //This API will be called when a user logs in, to update the cart with the user details (userId).

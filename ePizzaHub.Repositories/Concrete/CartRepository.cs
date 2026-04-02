@@ -30,5 +30,17 @@ namespace ePizzaHub.Repositories.Concrete
             int itemCounts = await _dbcontext.CartItems.Where(X => X.CartId == guid).CountAsync();
             return itemCounts;
         }
+
+        public async Task<int> UpdateItemQuantity(Guid cartId, int itemId, int quantity)
+        {
+            var currentItems = await _dbcontext.CartItems
+                .Where(x => x.CartId == cartId && x.ItemId == itemId)
+                .FirstOrDefaultAsync();
+            
+            currentItems.Quantity = quantity;
+
+            _dbcontext.Entry(currentItems).State = EntityState.Modified;
+            return await _dbcontext.SaveChangesAsync();
+        }
     }
 }

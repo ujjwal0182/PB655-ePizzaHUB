@@ -45,3 +45,10 @@ ViewData["Title"] = "Dashboard";
         }
     </div>
 </div>
+
+@* we need to load the Cart.js file here because we need to update the cart counter in the header when user click on add to cart button. 
+    Whenever the Cart.js will be invoked, it'll invoke the method indide Cart.js, internally CartController part and then it call the API and get the output.
+*@
+@section Scripts{
+    <script src="~/js/Cart.js" asp-append-version="true"></script>
+}

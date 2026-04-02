@@ -1,10 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ePizzaHub.UI.Models.ApiModels.Response;
+using ePizzaHub.UI.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace ePizzaHub.UI.Controllers
 {
     [Route("Cart")]
     public class CartController : BaseController
     {
+        private readonly IHttpClientFactory httpClientFactory;
+        public CartController(IHttpClientFactory httpClientFactory)
+        {
+            this.httpClientFactory = httpClientFactory;
+        }
         Guid CartId
         {
             get
@@ -12,9 +20,9 @@ namespace ePizzaHub.UI.Controllers
                 Guid id;
                 string cartId = Request.Cookies["CartId"];
                 // If the cookie does not exist, create a new (Guid) CartId and set it in the cookie
-                if (CartId == null)
+                if (cartId == null)
                 {
-                    id = Guid.NewGuid();
+                    id = Guid.NewGuid(); //NewGuid function is used to generate new guid
                     Response.Cookies.Append("CartId", id.ToString(), new CookieOptions()
                     {
                         Expires = DateTime.UtcNow.AddDays(2) // Set the cookie to expire in 7 days
@@ -28,10 +36,50 @@ namespace ePizzaHub.UI.Controllers
             }
         }
         [HttpGet("Index")]
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
             //Create API to get current cart details.
-            return View();
+            var client = httpClientFactory.CreateClient("ePizzaAPI");
+            var items = await client.GetFromJsonAsync<ApiResponseModel<GetCartResponseModel>>($"Cart/get-cart-details?cartId={CartId}");
+            return View(items.Data);
+        }
+
+        [HttpGet("GetCartItemCount")]
+        public async Task<JsonResult> GetCartItemCount()
+        {
+            var CartItemCount = await CartItemsCount(CartId);
+            return Json(new { Count = CartItemCount });
+            //I don't need to return the view here, I just need to return the cart count as a JSON response.
+        }
+
+        [HttpPut("UpdateQuantity/{itemId:int}/{quantity:int}")]
+        public async Task<JsonResult> UpdateQuantity(int itemId, int quantity)
+        {
+            var client = httpClientFactory.CreateClient("ePizzaAPI");
+
+            var updateCartItems = new
+            {
+                CartId = CartId,
+                ItemId = itemId,
+                Quantity = quantity
+            };
+
+            var itemAdded = await client.PutAsJsonAsync("Cart/update-item", updateCartItems);
+
+            // After updaing the item quantity, we need to get the updated cart item count and return it as a JSON response.
+            var CartItemCount = await CartItemsCount(CartId);
+            return Json(new { Count = CartItemCount });
+        }
+
+        [NonAction]
+        public async Task<int> CartItemsCount(Guid cartId)
+        {
+            //Create API to get current cart item count.
+            var client = httpClientFactory.CreateClient("ePizzaAPI");
+            var items = await client.GetFromJsonAsync<ApiResponseModel<int>>($"Cart/get-item-count?guid={cartId}");
+           
+            return items.Data;
+
         }
 
         public async Task<IActionResult> AddToCart(int id, decimal unitPrice, int quantity)

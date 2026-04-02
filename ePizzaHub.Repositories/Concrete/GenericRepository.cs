@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using ePizzaHub.Infrastructure.Models;
 using ePizzaHub.Repositories.Contract;
+using Microsoft.EntityFrameworkCore;
 
 namespace ePizzaHub.Repositories.Concrete
 {
@@ -46,6 +48,17 @@ namespace ePizzaHub.Repositories.Concrete
         {
             IQueryable<T> query = _dbcontext.Set<T>();
             return query.ToList();
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null)
+        {
+            IQueryable<T> query = _dbcontext.Set<T>();
+
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
+            return await query.ToListAsync();
         }
 
         public void Update(T entity)
