@@ -35,7 +35,7 @@ namespace ePizzaHub.Core.Concrete
                     new Claim("IsAdmin",userResponse.Roles.Any(x=>x.Equals("Admin")).ToString()),
                     new Claim("Roles", JsonSerializer.Serialize(userResponse.Roles))
                 ]),
-                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JWT: TokenExpiryInMinutes"])),
+                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Jwt:TokenExpiryInMinutes"])),
                 SigningCredentials = credentials,
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],

@@ -14,5 +14,6 @@ namespace ePizzaHub.Core.Contracts
         Task<CartResponseModel> GetCartDetailsAsync (Guid cartId);
         Task<bool> AddItemsToCart (AddToCartRequest request);
         Task<bool> UpdateItemInCartAsync(Guid cartId, int itemId, int quantity);
+        Task<int> UpdateCartUser(Guid cartId, int userId);
     }
 }

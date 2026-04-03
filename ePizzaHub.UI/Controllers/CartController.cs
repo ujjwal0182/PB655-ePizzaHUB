@@ -1,7 +1,9 @@
-﻿using ePizzaHub.UI.Models.ApiModels.Response;
+﻿using ePizzaHub.UI.Helpers;
+using ePizzaHub.UI.Models.ApiModels.Response;
 using ePizzaHub.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ePizzaHub.UI.Controllers
 {
@@ -9,9 +11,12 @@ namespace ePizzaHub.UI.Controllers
     public class CartController : BaseController
     {
         private readonly IHttpClientFactory httpClientFactory;
-        public CartController(IHttpClientFactory httpClientFactory)
+        private readonly ITokenService tokenService;
+
+        public CartController(IHttpClientFactory httpClientFactory, ITokenService tokenService)
         {
             this.httpClientFactory = httpClientFactory;
+            this.tokenService = tokenService;
         }
         Guid CartId
         {
@@ -98,6 +103,34 @@ namespace ePizzaHub.UI.Controllers
             var items = await client.GetFromJsonAsync<ApiResponseModel<int>>($"Cart/get-item-count?guid={cartId}");
            
             return items.Data;
+        }
+
+        [HttpGet]
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Checkout(AddressViewModel addressViewModel)
+        {
+            if (ModelState.IsValid && CurrentUser is not null)
+            {
+                var client = httpClientFactory.CreateClient("ePizzaAPI");
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenService.GetToken()}");
+
+                var updateCartUserRequest = new
+                {
+                    CartId = CartId,
+                    UserId = CurrentUser.UserId
+                };
+
+                var response = await client.PutAsJsonAsync("Cart/update-cart-user", updateCartUserRequest);
+                
+                response.EnsureSuccessStatusCode(); //It will throw an exception if the response status code is not successful (2xx)
+
+                return View();
+            }
+            return View();
         }
     }
 }

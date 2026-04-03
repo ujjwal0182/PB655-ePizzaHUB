@@ -104,5 +104,16 @@ namespace ePizzaHub.Core.Concrete
             int itemAdded = await _cartRepository.UpdateItemQuantity(cartId, itemId, quantity);
             return itemAdded > 0;
         }
+
+        public async Task<int> UpdateCartUser(Guid cartId, int userId)
+        {
+            var cartDetails = await _cartRepository.GetCartDetailsAsync(cartId);
+            if(cartDetails == null)
+            {
+                throw new Exception($"Cart with Id {cartId} does not exist");
+            }
+            cartDetails.UserId = userId;
+            return await _cartRepository.CommitAsync();
+        }
     }
 }

@@ -5,7 +5,10 @@ using ePizzaHub.Core.Contracts;
 using ePizzaHub.Infrastructure.Models;
 using ePizzaHub.Repositories.Concrete;
 using ePizzaHub.Repositories.Contract;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ePizzaHub.API
 {
@@ -25,6 +28,19 @@ namespace ePizzaHub.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //The first logic just the implement the token and second logic was to implement it.
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        ClockSkew = TimeSpan.Zero, // Set clock skew to zero to prevent token expiration issues
+                    };
+                });
 
             //we need to register our DBContext in the service collection, so that we can inject it in the repository layer.
             builder.Services.AddDbContext<PB655Context>(x =>
@@ -54,7 +70,9 @@ namespace ePizzaHub.API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseMiddleware<CommonResponseMiddleware>();
             //app.UseMiddleware<SecondMiddleware>(); //just to check the order of execution of middlewares. It will execute after CommonResponseMiddleware as it is added after that.
 

@@ -20,9 +20,9 @@ namespace ePizzaHub.UI.Controllers
                 //These claims are coming from the LoginController when we are generating the ticket, we are passing the claims in the ticket, so we can get those claims here and extract the details of the user.
                 if (User.Claims.Any())
                 {
-                    string userName = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.ToString();
-                    string Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.ToString();
-                    string UserId = User.Claims.FirstOrDefault(x => x.Type == "UserId")!.ToString();
+                    string userName = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value.ToString();
+                    string Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value.ToString();
+                    string UserId = User.Claims.FirstOrDefault(x => x.Type == "UserId")!.Value.ToString();
 
                     return new UserModel
                     {

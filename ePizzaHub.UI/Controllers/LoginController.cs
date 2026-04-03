@@ -1,4 +1,5 @@
-﻿using ePizzaHub.UI.Models.ApiModels.Request;
+﻿using ePizzaHub.UI.Helpers;
+using ePizzaHub.UI.Models.ApiModels.Request;
 using ePizzaHub.UI.Models.ApiModels.Response;
 using ePizzaHub.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -14,13 +15,15 @@ namespace ePizzaHub.UI.Controllers
     public class LoginController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly ITokenService tokenService;
 
         /// <summary>
         /// This is how we call an API in the controller from which we configured in program.cs
         /// </summary>
-        public LoginController(IHttpClientFactory httpClientFactory)
+        public LoginController(IHttpClientFactory httpClientFactory, ITokenService tokenService)
         {
             this.httpClientFactory = httpClientFactory;
+            this.tokenService = tokenService;
         }
 
         [HttpGet]
@@ -42,6 +45,9 @@ namespace ePizzaHub.UI.Controllers
                 if (userDetails.Success)
                 {
                     var accessToken = userDetails.Data.AccessToken;
+
+                    tokenService.SetToken(accessToken);//save the token value inside the access cookies.
+
                     var tokenExpiryInMinutes = userDetails.Data.TokenExpiryInMinutes;
                     var TokenHandler = new JwtSecurityTokenHandler();
                     var TokenDetails = TokenHandler.ReadJwtToken(accessToken) as JwtSecurityToken;

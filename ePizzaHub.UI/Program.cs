@@ -1,3 +1,4 @@
+using ePizzaHub.UI.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ePizzaHub.UI
@@ -29,6 +30,8 @@ namespace ePizzaHub.UI
                 option.BaseAddress = new Uri(builder.Configuration["EPizzaAPI:Url"]!);
                 option.DefaultRequestHeaders.Add("Accept", "application/json");
             });
+
+            builder.Services.AddTransient<ITokenService, TokenService>();
 
             var app = builder.Build();
 
