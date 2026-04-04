@@ -52,12 +52,15 @@ namespace ePizzaHub.API
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IItemService, ItemService>();
             builder.Services.AddTransient<ICartService, CartService>();
             builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
+            builder.Services.AddTransient<IPaymentService, PaymentService>();
 
             var app = builder.Build();
 

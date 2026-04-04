@@ -118,17 +118,35 @@ namespace ePizzaHub.UI.Controllers
                 var client = httpClientFactory.CreateClient("ePizzaAPI");
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenService.GetToken()}");
 
-                var updateCartUserRequest = new
-                {
-                    CartId = CartId,
-                    UserId = CurrentUser.UserId
-                };
+                //before updating the cart with user details, we need to check if the cart is associated with the current user or not.
+                //If not, then we need to update the cart with the current user's details.
 
-                var response = await client.PutAsJsonAsync("Cart/update-cart-user", updateCartUserRequest);
+                var cartDetails = await client.GetFromJsonAsync<ApiResponseModel<GetCartResponseModel>>($"Cart/get-cart-details?cartId={CartId}");
                 
-                response.EnsureSuccessStatusCode(); //It will throw an exception if the response status code is not successful (2xx)
+                if (cartDetails.Success)
+                {
+                    var updateCartUserRequest = new
+                    {
+                        CartId = CartId,
+                        UserId = CurrentUser.UserId
+                    };
 
-                return View();
+                    var response = await client.PutAsJsonAsync("Cart/update-cart-user", updateCartUserRequest);
+
+                    response.EnsureSuccessStatusCode(); //It will throw an exception if the response status code is not successful (2xx)
+
+                    //Whatever the user has inserted into an address form and whatever user has inserted into a cart detail,
+                    //I am preserving both the value into an temp data, because I need to use it into a different action method.
+                    TempData.Set("CartDetail", cartDetails.Data);
+                    TempData.Set("Address", addressViewModel);
+
+
+                    //store cart data in tempData 
+                    //store address data in tempData
+                    //navigate payment controller
+
+                    return RedirectToAction("Index", "Payment");
+                }
             }
             return View();
         }

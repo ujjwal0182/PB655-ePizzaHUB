@@ -1,4 +1,6 @@
+
 using ePizzaHub.UI.Helpers;
+using ePizzaHub.UI.RazorPay;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ePizzaHub.UI
@@ -32,6 +34,7 @@ namespace ePizzaHub.UI
             });
 
             builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddTransient<IRazorPayService, RazorPayService>();
 
             var app = builder.Build();
 
