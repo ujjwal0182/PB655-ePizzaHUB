@@ -70,7 +70,7 @@ namespace ePizzaHub.UI.Controllers
                     var paymentModel = GetPaymentRequest(paymentId, orderId, transactionId, currency, status);
 
                     var client = _httpClientFactory.CreateClient("ePizzaAPI");
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenService.GetToken()}");
+                    //client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenService.GetToken()}");
 
                     var paymentRequest = await client.PostAsJsonAsync("Payment", paymentModel);
                     paymentRequest.EnsureSuccessStatusCode();

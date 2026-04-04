@@ -116,7 +116,7 @@ namespace ePizzaHub.UI.Controllers
             if (ModelState.IsValid && CurrentUser is not null)
             {
                 var client = httpClientFactory.CreateClient("ePizzaAPI");
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenService.GetToken()}");
+                //client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenService.GetToken()}"); //Now this will be done by TokenHandler, so we don't need to add the token in the header manually.
 
                 //before updating the cart with user details, we need to check if the cart is associated with the current user or not.
                 //If not, then we need to update the cart with the current user's details.
