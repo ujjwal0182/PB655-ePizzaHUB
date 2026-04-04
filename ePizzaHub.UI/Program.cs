@@ -14,29 +14,14 @@ namespace ePizzaHub.UI
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Login/Login";
-                    options.LogoutPath = "/Login/Signout";
-                });
+            builder.Services
+                .AddAuthenticationMechanism()
+                .AddAuthorization()
+                .AddHttpContextAccessor();
 
-            builder.Services.AddAuthorization();
-
-            //This way my APIs are configured on the service injection layer, How can you get this in the controller ?
-
-            builder.Services.AddHttpContextAccessor(); ///It is a method to register the dependency injection of services inside this DI container.
-
-            builder.Services.AddTransient<TokenHandler>(); //This is a custom handler to add the token in the header of every API call, so we don't have to worry about adding the token in every API call in the controller.
-
-            builder.Services.AddHttpClient("ePizzaAPI", option =>
-            {
-                option.BaseAddress = new Uri(builder.Configuration["EPizzaAPI:Url"]!);
-                option.DefaultRequestHeaders.Add("Accept", "application/json");
-            }).AddHttpMessageHandler<TokenHandler>();
-
-            builder.Services.AddTransient<ITokenService, TokenService>();
-            builder.Services.AddTransient<IRazorPayService, RazorPayService>();
+            builder.Services
+                .RegisterEPizzaApiClient(builder.Configuration)
+                .RegisterServices();
 
             var app = builder.Build();
 

@@ -53,7 +53,7 @@ namespace ePizzaHub.API.Controllers
         [HttpPut]
         [Route("delete-item")]
         [AllowAnonymous]
-        public async Task<IActionResult> DeleteItem()
+        public async Task<IActionResult> DeleteItem(Guid CartId, int itemId)
         {
             return Ok();
         }
