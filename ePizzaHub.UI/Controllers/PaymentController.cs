@@ -149,7 +149,7 @@ namespace ePizzaHub.UI.Controllers
             {
                 OrderItems orderItem = new OrderItems()
                 {
-                    ItemId = item.Id,
+                    ItemId = item.ItemId,
                     Quantity = item.Quantity,
                     Total = item.ItemTotal,
                     UnitPrice = item.UnitPrice,
