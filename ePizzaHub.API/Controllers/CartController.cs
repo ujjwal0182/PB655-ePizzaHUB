@@ -25,6 +25,10 @@ namespace ePizzaHub.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetCartItemCount(Guid guid)
         {
+            if(guid == Guid.Empty)
+            {
+                return BadRequest("Cart Id can not be empty.");
+            }
             var itemCount = await _cartService.GetCartItemCountAsync(guid);
             return Ok(itemCount);
         }

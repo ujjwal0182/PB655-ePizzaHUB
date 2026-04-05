@@ -49,6 +49,7 @@ namespace ePizzaHub.Core.Concrete
         {
             return await _cartRepository.GetCartItemQuantityAsync(cardId);
         }
+
         private async Task<int> AddNewCartAsync(AddToCartRequest request)
         {
             Cart? cartDetails = new Cart()
