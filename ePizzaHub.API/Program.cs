@@ -8,6 +8,7 @@ using ePizzaHub.Repositories.Contract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace ePizzaHub.API
@@ -19,6 +20,15 @@ namespace ePizzaHub.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            Serilog.Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext() // Enrich logs with contextual information (e.g., request details)
+                .Enrich.WithMachineName() // Enrich logs with the machine name
+                .Enrich.WithEnvironmentName() // Enrich logs with the environment name (e.g., Development, Production)
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
 
             // Scans all assemblies in the application and automatically registers
             // all classes that inherit from AutoMapper Profile (e.g., UserMappingProfile)
@@ -75,6 +85,8 @@ namespace ePizzaHub.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSerilogRequestLogging();
 
             app.UseMiddleware<CommonResponseMiddleware>();
             //app.UseMiddleware<SecondMiddleware>(); //just to check the order of execution of middlewares. It will execute after CommonResponseMiddleware as it is added after that.
