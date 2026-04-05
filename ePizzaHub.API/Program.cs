@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using Log = Serilog.Log;
 
 namespace ePizzaHub.API
 {
@@ -21,7 +22,7 @@ namespace ePizzaHub.API
 
             // Add services to the container.
 
-            Serilog.Log.Logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration)
                 .Enrich.FromLogContext() // Enrich logs with contextual information (e.g., request details)
                 .Enrich.WithMachineName() // Enrich logs with the machine name

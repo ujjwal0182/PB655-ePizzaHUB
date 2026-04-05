@@ -13,10 +13,12 @@ namespace ePizzaHub.API.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly ILogger<CartController> _logger;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, ILogger<CartController> logger)
         {
             _cartService = cartService;
+            _logger = logger;
         }
 
         // This API will be called when a user adds an item to the cart, to get the current cart item count from the database and display it in the cart icon in the header.
@@ -25,10 +27,13 @@ namespace ePizzaHub.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetCartItemCount(Guid guid)
         {
-            if(guid == Guid.Empty)
+            if (guid == Guid.Empty)
             {
                 return BadRequest("Cart Id can not be empty.");
             }
+
+            _logger.LogInformation($"The value of Cart Id is {guid}");
+
             var itemCount = await _cartService.GetCartItemCountAsync(guid);
             return Ok(itemCount);
         }
